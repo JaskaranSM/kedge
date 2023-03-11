@@ -39,5 +39,6 @@ RUN git clone --recurse-submodules https://github.com/JaskaranSM/kedge
 WORKDIR /tmp/kedge/build
 RUN cmake ..
 RUN make
+RUN mkdir /root/.config
 
 CMD ["./kedge"]
