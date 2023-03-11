@@ -19,6 +19,13 @@ class sheath;
 void
 load_sess_params(std::string const& cd, lt::session_params& params);
 
+#define ENV_USER_AGENT "LT_USER_AGENT"
+#define ENV_HANDSHAKE_CLIENT_VERSION "LT_HANDSHAKE_CLIENT_VERSION"
+#define ENV_UPLOAD_RATE "LT_UPLOAD_RATE"
+#define ENV_CONNECTIONS_LIMIT "LT_CONNECTIONS_LIMIT"
+#define ENV_LISTEN_ADDR "LT_LISTEN_ADDR"
+
+
 struct Option {
 
     std::string peerID    = "";
@@ -123,11 +130,6 @@ Option::init_from(int argc, char* argv[])
     if (vm.count("upload-rate")) {
         LOG_DEBUG << "set upload rate limit " << uploadRate;
         params.settings.set_int(settings_pack::upload_rate_limit, uploadRate);
-    }
-
-    if (vm.count("half-open-limit")) {
-        LOG_DEBUG << "set half open connections limit " << halfOpenLimit;
-        params.settings.set_int(settings_pack::half_open_limit, halfOpenLimit);
     }
 
     // config settings and log out
