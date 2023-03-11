@@ -64,7 +64,7 @@ add_executable(kedge ${sources})
 
 if(NOT build_shared)
 	set_property(TARGET torrent-rasterbar PROPERTY IMPORTED_LOCATION ${LT_ROOT}/lib/libtorrent-rasterbar.a)
-	set_property(TARGET torrent-rasterbar PROPERTY IMPORTED_LOCATION ${LT_ROOT}/lib/libtry_signal.a)
+	set_property(TARGET libtry_signal PROPERTY IMPORTED_LOCATION ${LT_ROOT}/lib/libtry_signal.a)
 
 	if(TARGET ZLIB::ZLIB)
 		set_property(TARGET ZLIB::ZLIB PROPERTY IMPORTED_LOCATION ${ZLIB_LIBRARIES})
