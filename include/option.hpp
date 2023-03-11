@@ -29,7 +29,6 @@ struct Option {
     std::string handshakeClientVersion = "";
     int connectionsLimit = 0;
     int uploadRate = 0;
-    int halfOpenLimit = 0;
     std::string webuiRoot = "";
     std::string httpAddr = "127.0.0.1";
     std::uint_least16_t httpPort = 16180;
@@ -57,9 +56,8 @@ std::string mapper(std::string env_var)
    if (env_var == ENV_HANDSHAKE_CLIENT_VERSION) return "handshake-client-version";
    if (env_var == ENV_CONNECTIONS_LIMIT) return "connections-limit";
    if (env_var == ENV_USER_AGENT) return "user-agent";
-   if (env_var == ENV_HALF_OPEN_LIMIT) return "half-open-limit";
    if (env_var == ENV_UPLOAD_RATE) return "upload-rate";
-   if (env_var == ENV_LISTEN_ADDR) sreturn "listens";
+   if (env_var == ENV_LISTEN_ADDR) return "listens";
 #ifndef __APPLE__
    if (env_var == ENV_HTTP_PORT) return "http-port";
 #endif
@@ -75,10 +73,9 @@ Option::init_from(int argc, char* argv[])
         ("listens", po::value<std::string>(&listens)->default_value("0.0.0.0:16188"), "listen_interfaces " ENV_LISTEN_ADDR)
         ("moved-root", po::value<std::string>(&movedRoot), "moved root, env: " ENV_MOVED_ROOT)
         ("user-agent", po::value<std::string>(&userAgent)->default_value("qBittorrent/4.3.8"), "libtorrent user agent: " ENV_USER_AGENT)
-        ("handshake-client-version", po::value<std::string>(&handshakeClientVersion)->default_value("qBittorrent/4.3.8")," extended handshake client version: " ENV_HANDSHAKE_CLIENT_VERSION)
+        ("handshake-client-version", po::value<std::string>(&handshakeClientVersion)->default_value("qBittorrent/4.3.8"),"extended handshake client version: " ENV_HANDSHAKE_CLIENT_VERSION)
         ("connections-limit", po::value<int>(&connectionsLimit)->default_value(500), "connections limit: " ENV_CONNECTIONS_LIMIT)
         ("upload-rate", po::value<int>(&uploadRate)->default_value(10), "upload rate limit: " ENV_UPLOAD_RATE)
-        ("half-open-limit", po::value<int>(&halfOpenLimit)->default_value(100), "half open connections limit: " ENV_HALF_OPEN_LIMIT)
         ("store-root,d", po::value<std::string>(&storeRoot)->default_value(getStoreDir()), "store root, env: " ENV_STORE_ROOT)
         ("webui-root", po::value<std::string>(&webuiRoot)->default_value(getWebUI()), "web UI root, env: " ENV_WEBUI_ROOT)
         ("peer-id", po::value<std::string>(&peerID)->default_value("-LT-"), "set prefix of fingerprint, env: " ENV_PEERID_PREFIX)
@@ -217,7 +214,7 @@ load_sess_params(std::string const& cd, lt::session_params& params)
     settings.set_bool(settings_pack::enable_natpmp, true);
     settings.set_bool(settings_pack::enable_dht, true);
     settings.set_bool(settings_pack::enable_lsd, true);
-    
+
 
     settings.set_bool(settings_pack::validate_https_trackers, false);
 }
