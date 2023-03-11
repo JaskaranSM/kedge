@@ -21,13 +21,14 @@ if(NOT build_shared)
 
 # include_directories( ${BOOST_ROOT}/include )
 	set(BOOST_ROOT "/opt/boost")
-	set(LT_ROOT "/opt/lt12")
+	set(LT_ROOT "/usr/local")
 
 	include_directories( ${LT_ROOT}/include )
 	link_directories( ${LT_ROOT}/lib )
 
 	add_library(ZLIB::ZLIB STATIC IMPORTED)
 	add_library(torrent-rasterbar STATIC IMPORTED)
+	add_library(try-signal STATIC IMPORTED)
 else()
 	message(STATUS "use shared build")
 endif()
@@ -63,6 +64,7 @@ add_executable(kedge ${sources})
 
 if(NOT build_shared)
 	set_property(TARGET torrent-rasterbar PROPERTY IMPORTED_LOCATION ${LT_ROOT}/lib/libtorrent-rasterbar.a)
+	set_property(TARGET torrent-rasterbar PROPERTY IMPORTED_LOCATION ${LT_ROOT}/lib/libtry_signal.a)
 
 	if(TARGET ZLIB::ZLIB)
 		set_property(TARGET ZLIB::ZLIB PROPERTY IMPORTED_LOCATION ${ZLIB_LIBRARIES})
@@ -70,7 +72,7 @@ if(NOT build_shared)
 else()
 	find_package(LibtorrentRasterbar REQUIRED)
 endif()
-target_link_libraries(kedge PUBLIC ${Boost_LIBRARIES} torrent-rasterbar)
+target_link_libraries(kedge PUBLIC ${Boost_LIBRARIES} torrent-rasterbar try-signal)
 
 find_package(OpenSSL REQUIRED)
 if(TARGET OpenSSL::SSL)
