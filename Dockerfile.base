@@ -1,0 +1,39 @@
+FROM ubuntu:22.04
+
+WORKDIR /tmp
+
+# Install dependencies
+RUN apt-get update -y && \
+    apt-get install -y \
+    autotools-dev \
+    build-essential \
+    clang \
+    cmake \
+    gcc \
+    git \
+    libbz2-dev \
+    libc++-dev \
+    libclang-dev \
+    libicu-dev \
+    libssl-dev \
+    python3-dev \
+    wget
+
+# Build and install Boost
+RUN wget -q https://boostorg.jfrog.io/artifactory/main/release/1.76.0/source/boost_1_76_0.tar.gz && \
+    tar -xvf boost_1_76_0.tar.gz && \
+    rm boost_1_76_0.tar.gz && \
+    cd boost_1_76_0 && \
+    ./bootstrap.sh --prefix=/opt/boost && \
+    ./b2 -j"$(nproc)"--build-dir=build --prefix=/opt/boost --with-program_options --with-json --with-system --with-thread cxxstd=17 link=static runtime-link=static variant=release threading=multi install && \
+    cd tools/build && \
+    ../../b2 -j"$(nproc)" --build-dir=build --prefix=/opt/boost --with=all cxxstd=17 variant=release install
+
+# Build and install libtorrent
+RUN wget -q https://github.com/arvidn/libtorrent/releases/download/v2.0.8/libtorrent-rasterbar-2.0.8.tar.gz && \
+    tar -xvf libtorrent-rasterbar-2.0.8.tar.gz && \
+    rm libtorrent-rasterbar-2.0.8.tar.gz && \
+    cd libtorrent-rasterbar-2.0.8 && \
+    export BOOST_ROOT=/tmp/boost_1_76_0 && \
+    /opt/boost/bin/b2 -j"$(nproc)" --prefix=/usr/local optimization=speed cxxstd=17 variant=release crypto=openssl link=static runtime-link=static install && \
+    rm -rf /tmp/*
