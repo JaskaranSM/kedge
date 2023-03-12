@@ -99,7 +99,7 @@ struct sheath : public std::enable_shared_from_this<sheath>
     end();
 
     bool
-    add_magnet(std::string const& uri);
+    add_magnet(std::string const& uri, std::string const& save_path);
     bool
     add_torrent(std::string const& filename);
     bool

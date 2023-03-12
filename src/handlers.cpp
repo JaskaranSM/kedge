@@ -98,7 +98,7 @@ handleTorrents(http::request<string_body> const& req) // get or post
             return make_resp_500(req, "failed to add with metainfo");
         }
 
-        if (shth_->add_magnet(req.body())) { return make_resp_204(req); }
+        if (shth_->add_magnet(req.body(), dir)) { return make_resp_204(req); }
         return make_resp_500(req, "failed to add with magnet");
 	}
 

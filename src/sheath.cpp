@@ -420,7 +420,7 @@ sheath::set_torrent_params(lt::add_torrent_params& p)
 }
 
 bool
-sheath::add_magnet(std::string const& uri)
+sheath::add_magnet(std::string const& uri, std::string const& save_path)
 {
     lt::error_code ec;
     lt::add_torrent_params p = lt::parse_magnet_uri(uri, ec);
@@ -439,6 +439,7 @@ sheath::add_magnet(std::string const& uri)
         PLOG_ERROR_IF(ec) << "failed to load resume data: " <<  ec.message();
     }
 
+    p.save_path = save_path;
     set_torrent_params(p);
 
     ses_->async_add_torrent(std::move(p));
