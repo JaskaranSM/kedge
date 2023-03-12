@@ -82,11 +82,11 @@ Option::init_from(int argc, char* argv[])
         ("user-agent", po::value<std::string>(&userAgent)->default_value("qBittorrent/4.3.8"), "libtorrent user agent: " ENV_USER_AGENT)
         ("handshake-client-version", po::value<std::string>(&handshakeClientVersion)->default_value("qBittorrent/4.3.8"),"extended handshake client version: " ENV_HANDSHAKE_CLIENT_VERSION)
         ("connections-limit", po::value<int>(&connectionsLimit)->default_value(500), "connections limit: " ENV_CONNECTIONS_LIMIT)
-        ("upload-rate", po::value<int>(&uploadRate)->default_value(10), "upload rate limit: " ENV_UPLOAD_RATE)
+        ("upload-rate", po::value<int>(&uploadRate)->default_value(10*1024), "upload rate limit: " ENV_UPLOAD_RATE)
         ("store-root,d", po::value<std::string>(&storeRoot)->default_value(getStoreDir()), "store root, env: " ENV_STORE_ROOT)
         ("webui-root", po::value<std::string>(&webuiRoot)->default_value(getWebUI()), "web UI root, env: " ENV_WEBUI_ROOT)
-        ("peer-id", po::value<std::string>(&peerID)->default_value("-LT-"), "set prefix of fingerprint, env: " ENV_PEERID_PREFIX)
-        ("dht-bootstrap-nodes", po::value<std::string>()->default_value("dht.transmissionbt.com:6881"), "a comma-separated list of Host port-pairs. env: " ENV_BOOTSTRAP_NODES)
+        ("peer-id", po::value<std::string>(&peerID)->default_value("-qB4380-"), "set prefix of fingerprint, env: " ENV_PEERID_PREFIX)
+        ("dht-bootstrap-nodes", po::value<std::string>()->default_value("dht.libtorrent.org:25401"), "a comma-separated list of Host port-pairs. env: " ENV_BOOTSTRAP_NODES)
         ("http-addr", po::value<std::string>()->default_value("127.0.0.1"), "http listen address, env: " ENV_HTTP_ADDR)
 #ifndef __APPLE__
         ("http-port", po::value<std::uint_least16_t>(&httpPort)->default_value(16180), "http listen port, env: " ENV_HTTP_PORT)
@@ -111,6 +111,7 @@ Option::init_from(int argc, char* argv[])
 
     using lt::session_handle;
     using lt::settings_pack;
+    params.settings = settings_pack::default_settings();
 
     if (vm.count("user-agent")) {
         LOG_DEBUG << "set user agent " << userAgent;
@@ -212,8 +213,8 @@ load_sess_params(std::string const& cd, lt::session_params& params)
         | lt::alert_category::port_mapping_log
         | lt::alert_category::file_progress);
 
-    settings.set_bool(settings_pack::enable_upnp, true);
-    settings.set_bool(settings_pack::enable_natpmp, true);
+    settings.set_bool(settings_pack::enable_upnp, false);
+    settings.set_bool(settings_pack::enable_natpmp, false);
     settings.set_bool(settings_pack::enable_dht, true);
     settings.set_bool(settings_pack::enable_lsd, true);
 
