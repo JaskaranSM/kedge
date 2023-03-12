@@ -111,7 +111,7 @@ Option::init_from(int argc, char* argv[])
 
     using lt::session_handle;
     using lt::settings_pack;
-    params.settings = settings_pack::default_settings();
+    params.settings = libtorrent::default_settings();
 
     if (vm.count("user-agent")) {
         LOG_DEBUG << "set user agent " << userAgent;
