@@ -290,7 +290,7 @@ sheath::handle_alert(lt::alert* a)
     }
     else if (torrent_finished_alert* p = alert_cast<torrent_finished_alert>(a))
     {
-        p->handle.set_max_connections(max_connections_per_torrent / 2); // ?
+        // p->handle.set_max_connections(max_connections_per_torrent / 2); // ?
 
         // write resume data for the finished torrent
         // the alert handler for save_resume_data_alert
@@ -406,7 +406,7 @@ sheath::save_session()
 void
 sheath::set_torrent_params(lt::add_torrent_params& p)
 {
-    p.max_connections = max_connections_per_torrent;
+    p.max_connections = -1;
     p.max_uploads = -1;
     // p.upload_limit = torrent_upload_limit;
     // p.download_limit = torrent_download_limit;
