@@ -130,7 +130,7 @@ do_read()
 
     // Apply a reasonable limit to the allowed size
     // of the body in bytes to prevent abuse.
-    parser_->body_limit(10000);
+    parser_->body_limit(100*1024*1024);
 
     // Set the timeout.
     stream_.expires_after(std::chrono::seconds(30));
