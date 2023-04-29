@@ -19,19 +19,15 @@ using namespace btd;
 
 int main(int argc, char* argv[])
 {
-    const std::string logMain(getLogsDir()+"/kedge-main.log");
-    const std::string logAlert(getLogsDir()+"/kedge-alert.log");
-    const std::string logWeb(getLogsDir()+"/kedge-web.log");
-    plog::init(plog::debug, logMain.c_str(), 1024*1024*32, 2);
-    plog::init<AlertLog>(plog::debug, logAlert.c_str(), 1024*1024*64, 2);
-    plog::init<WebLog>(plog::debug, logWeb.c_str(), 1024*1024*64, 2);
+    const std::string logMain("./kedge-main.log");
+
+    static plog::RollingFileAppender<plog::TxtFormatter> logMainAppender(logMain.c_str(), 1024*1024*32, 2); // Create the 1st appender.
+    
+    //static plog::ConsoleAppender<plog::TxtFormatter> consoleAppender;
+    plog::init(plog::debug, &logMainAppender);
+
 
     LOG_DEBUG << "init log " << logMain;
-    LOG_DEBUG << "init log " << logAlert;
-    LOG_DEBUG << "init log " << logWeb;
-
-    PLOGD_(AlertLog) << "start alert log";
-    PLOGD_(WebLog) << "start http log";
 
     Option opt;
     if (!opt.init_from(argc, argv)) { return EXIT_FAILURE; }

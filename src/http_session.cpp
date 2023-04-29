@@ -118,7 +118,7 @@ fail(beast::error_code ec, char const* what)
     if(ec == net::error::operation_aborted)
         return;
 
-    PLOGI_(WebLog) << what << ": " << ec.message() << "\n";
+    LOG_DEBUG << what << ": " << ec.message() << "\n";
 }
 
 void
@@ -139,7 +139,7 @@ do_read()
     http::async_read(
         stream_,
         buffer_,
-        parser_->get(),
+        *parser_,
         beast::bind_front_handler(
             &http_session::on_read,
             shared_from_this()));
