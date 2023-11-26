@@ -17,7 +17,13 @@ RUN apt-get update -y && \
     libicu-dev \
     libssl-dev \
     python3-dev \
+    locales \
     wget
+
+RUN locale-gen en_US.UTF-8
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US:en
+ENV LC_ALL en_US.UTF-8
 
 # Build and install Boost
 RUN wget -q https://boostorg.jfrog.io/artifactory/main/release/1.76.0/source/boost_1_76_0.tar.gz && \
